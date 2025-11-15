@@ -12,44 +12,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $telefono = trim($_POST["telefono"] ?? "");
     $clave    = $_POST["clave"] ?? "";
 
-    // validar nombre
     if ($nombre === "") {
         $err["nombre"] = "requerido";
     }
 
-    // validar correo
     if ($correo === "") {
         $err["correo"] = "requerido";
     } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
         $err["correo"] = "correo no válido";
     }
 
-    // validar telefono (opcional, solo si envía algo)
     if ($telefono !== "" && !preg_match('/^[0-9+\s-]{6,20}$/', $telefono)) {
         $err["telefono"] = "teléfono no válido";
     }
 
-    // validar contraseña
     if (strlen($clave) < 8) {
         $err["clave"] = "mínimo 8 caracteres";
     }
 
     if (empty($err)) {
         try {
-            // usar la clase cliente que definimos antes:
-            // __construct($nombre, $correo, $telefono, $password_plano)
             $nuevo_cliente = new cliente($nombre, $correo, $telefono, $clave);
             $nuevo_cliente->guardar($pdo);
 
             $ok = "cliente registrado correctamente";
 
-            // limpiar campos del formulario
             $_POST["nombre"]   = "";
             $_POST["correo"]   = "";
             $_POST["telefono"] = "";
 
         } catch (exception $e) {
-            // aquí suele caer si el correo ya existe (unique)
             $err["general"] = "error al registrar: " . $e->getMessage();
         }
     }
