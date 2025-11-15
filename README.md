@@ -30,6 +30,7 @@ Clonar el Repositorio:
 
 git clone https://github.com/joselo012/sistema-libreria-lp2.git
 cd sistema-libreria-lp2
+
 Crear tu Branch Individual: (Reemplaza con tu nombre/tarea)
 
 ----- Bash
